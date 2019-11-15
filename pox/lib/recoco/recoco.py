@@ -13,13 +13,17 @@
 # limitations under the License.
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 from collections import deque
 try:
   from queue import PriorityQueue
   from queue import Queue
 except ImportError:
-  from Queue import PriorityQueue
-  from Queue import Queue
+  from queue import PriorityQueue
+  from queue import Queue
 import time
 import threading
 from threading import Thread
@@ -341,7 +345,7 @@ class Scheduler (object):
         # Just unschedule/sleep
         #print "Unschedule", t, rv
         pass
-      elif type(rv) == int or type(rv) == long or type(rv) == float:
+      elif type(rv) == int or type(rv) == int or type(rv) == float:
         # Sleep time
         if rv == 0:
           #print "sleep 0"
@@ -882,8 +886,8 @@ class SelectHub (object):
 
     if timeout is None: timeout = CYCLE_MAXIMUM
     ro, wo, xo = self._select_func( list(rl.keys()) + [self._pinger],
-                                    wl.keys(),
-                                    xl.keys(), timeout )
+                                    list(wl.keys()),
+                                    list(xl.keys()), timeout )
 
     if len(ro) == 0 and len(wo) == 0 and len(xo) == 0 and timeoutTask != None:
       # IO is idle - dispatch timers / release timeouts
@@ -918,7 +922,7 @@ class SelectHub (object):
         if task not in rets: rets[task] = ([],[],[])
         rets[task][2].append(i)
 
-      for t,v in rets.items():
+      for t,v in list(rets.items()):
         del tasks[t]
         self._return(t, v)
       rets.clear()

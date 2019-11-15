@@ -16,6 +16,7 @@
 DHCP Client stuff
 """
 
+from builtins import str
 from pox.core import core
 log = core.getLogger()
 

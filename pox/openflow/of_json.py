@@ -19,6 +19,9 @@ data structures.
 Lots of stuff could be improved and the naming is pretty awful.
 """
 
+from builtins import chr
+from builtins import str
+from past.builtins import basestring
 from pox.lib.util import fields_of,is_scalar
 import pox.openflow.libopenflow_01 as of
 

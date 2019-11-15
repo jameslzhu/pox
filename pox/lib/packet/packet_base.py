@@ -16,6 +16,10 @@
 # This file is derived from the packet library in NOX, which was
 # developed by Nicira, Inc.
 
+from builtins import str
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 import logging
 lg = logging.getLogger('packet')
 
@@ -88,7 +92,7 @@ class packet_base (object):
         #TODO: Remove?
         lg.warning(*args)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.parsed is True
 
     def __len__(self):

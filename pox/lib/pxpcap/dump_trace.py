@@ -59,7 +59,7 @@ def cb (data, parser):
         break
       return
     if not hasattr(p, 'next'): break
-    p = p.next
+    p = p.__next__
 
   if not show: return
 

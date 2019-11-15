@@ -25,6 +25,8 @@ Add ARP entries on commandline like:
 Leave MAC unspecified if you want to use the switch MAC.
 """
 
+from builtins import str
+from builtins import object
 from pox.core import core
 import pox
 log = core.getLogger()
@@ -87,7 +89,7 @@ class Entry (object):
 class ARPTable (dict):
   def __repr__ (self):
     o = []
-    for k,e in self.items():
+    for k,e in list(self.items()):
       t = int(e.timeout - time.time())
       if t < 0:
         t = "X"
@@ -98,7 +100,7 @@ class ARPTable (dict):
       if mac is True: mac = "<Switch MAC>"
       o.append((k,"%-17s %-20s %3s" % (k, mac, t)))
 
-    for k,t in _failed_queries.items():
+    for k,t in list(_failed_queries.items()):
       if k not in self:
         t = int(time.time() - t)
         o.append((k,"%-17s %-20s %3ss ago" % (k, '?', t)))
@@ -127,10 +129,10 @@ class ARPTable (dict):
 
 
 def _handle_expiration ():
-  for k,e in _arp_table.items():
+  for k,e in list(_arp_table.items()):
     if e.is_expired:
       del _arp_table[k]
-  for k,t in _failed_queries.items():
+  for k,t in list(_failed_queries.items()):
     if time.time() - t > ARP_TIMEOUT:
       del _failed_queries[k]
 
@@ -288,6 +290,6 @@ def launch (timeout=ARP_TIMEOUT, no_flow=False, eat_packets=True,
   _learn = not no_learn
 
   core.Interactive.variables['arp'] = _arp_table
-  for k,v in kw.items():
+  for k,v in list(kw.items()):
     _arp_table[IPAddr(k)] = Entry(v, static=True)
   core.registerNew(ARPResponder)

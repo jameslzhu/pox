@@ -30,6 +30,7 @@ in-band control with something like:
 Please submit improvements. :)
 """
 
+from builtins import object
 from pox.core import core
 import pox
 log = core.getLogger()
@@ -119,7 +120,7 @@ class NAT (object):
 
   def _expire (self):
     dead = []
-    for r in self._record_by_outgoing.values():
+    for r in list(self._record_by_outgoing.values()):
       if r.expired:
         dead.append(r)
 

@@ -82,7 +82,7 @@ def launch (__INSTANCE__ = None, **kw):
     else:
       if use_kw:
         v = dict([x.split('=',1) for x in v.split(',')])
-        v = {k:_parse(v) for k,v in v.items()}
+        v = {k:_parse(v) for k,v in list(v.items())}
         h = C(**v)
       else:
         v = [_parse(p) for p in v.split(',')]
@@ -90,7 +90,7 @@ def launch (__INSTANCE__ = None, **kw):
     h.setFormatter(formatter)
     logging.getLogger().addHandler(h)
 
-  for _k,v in kw.items():
+  for _k,v in list(kw.items()):
     k = _k
     use_kw = k.startswith("*")
     if use_kw: k = k[1:]

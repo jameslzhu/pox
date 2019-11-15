@@ -20,12 +20,15 @@ Meant to work with reactive components like l2_learning or l2_pairs.
 Start with --no-clear-tables if you don't want to clear tables on changes.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from pox.core import core
 from pox.lib.revent import EventHalt
 from pox.lib.addresses import EthAddr
 import pox.openflow.libopenflow_01 as of
 
-from Tkinter import *
+from tkinter import *
 
 # Sets of blocked and unblocked MACs
 blocked = set()

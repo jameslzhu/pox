@@ -43,7 +43,7 @@ class DNSLookup (Event):
     self.qtype = rr.qtype
 
     self.rr = rr
-    for t in pkt_dns.rrtype_to_str.values():
+    for t in list(pkt_dns.rrtype_to_str.values()):
       setattr(self, t, False)
     t = pkt_dns.rrtype_to_str.get(rr.qtype)
     if t is not None:

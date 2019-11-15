@@ -23,8 +23,11 @@ Example:
   ./pox.py datapaths.hub --ports=eth0,eth1,eth2
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from pox.core import core
-from Queue import Queue
+from queue import Queue
 import pox.lib.packet as pkt
 from pox.lib.interfaceio import PCapInterface
 

@@ -38,6 +38,7 @@ from pox.lib.util import initHelper
 from pox.lib.util import hexdump
 from pox.lib.util import is_listlike
 from functools import reduce
+from future.utils import with_metaclass
 
 
 EMPTY_ETH = EthAddr(None)
@@ -162,7 +163,7 @@ class _ofp_meta (type):
       return cls._MIN_LENGTH
 
 
-class ofp_base (object):
+class ofp_base (with_metaclass(_ofp_meta, object)):
   """
   Base class for OpenFlow messages/structures
 
@@ -171,7 +172,6 @@ class ofp_base (object):
   implement a __len__ instance method and set a class level _MIN_LENGTH
   attribute to your minimum length.
   """
-  __metaclass__ = _ofp_meta
 
   def _assert (self):
     r = self._validate()
@@ -761,12 +761,14 @@ class ofp_phy_port (ofp_base):
     if self.peer != other.peer: return False
     return True
 
-  def __cmp__ (self, other):
-    if type(other) != type(self): return id(self)-id(other)
-    if self.port_no < other.port_no: return -1
-    if self.port_no > other.port_no: return 1
-    if self == other: return 0
-    return id(self)-id(other)
+  def __lt__ (self, other):
+    if type(other) != type(self):
+      return id(self) < id(other)
+    if self.port_no != other.port_no:
+      return self.port_no < other.port_no
+    if self == other:
+      return False
+    return id(self) < id(other)
 
   def __hash__(self, *args, **kwargs):
     return hash(self.port_no) ^ hash(self.hw_addr) ^ \
@@ -1217,7 +1219,7 @@ class ofp_match (ofp_base):
     def fix (addr):
       if addr is None: return 0
       if type(addr) is int: return addr & 0xffFFffFF
-      if type(addr) is long: return addr & 0xffFFffFF
+      if type(addr) is int: return addr & 0xffFFffFF
       return addr.toUnsigned()
 
     packed += struct.pack("!LLHH", check_ip_or_arp(fix(self.nw_src)),
@@ -1385,7 +1387,7 @@ class ofp_match (ofp_base):
       v = getattr(self, f)
       if type(v) is int:
         h ^= v
-      elif type(v) is long:
+      elif type(v) is int:
         h ^= v
       else:
         h ^= hash(v)
@@ -2179,7 +2181,7 @@ class ofp_features_reply (ofp_header):
     offset,(self.capabilities, self.actions) = _unpack("!LL", raw, offset)
     portCount = (length - 32) // len(ofp_phy_port)
     self.ports = []
-    for i in xrange(0, portCount):
+    for i in range(0, portCount):
       p = ofp_phy_port()
       offset = p.unpack(raw, offset)
       self.ports.append(p)

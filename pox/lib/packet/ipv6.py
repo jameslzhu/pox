@@ -46,7 +46,10 @@ are probably places where the API isn't quite right yet.  But it's
 a start.
 """
 from __future__ import absolute_import
+from __future__ import division
 
+from past.utils import old_div
+from builtins import object
 import struct
 from .packet_utils import *
 from .tcp import *
@@ -98,7 +101,7 @@ class NormalExtensionHeader (ExtensionHeader):
     Returns the packed length
     """
     l = self.payload_length + 2
-    return ((l + 7) / 8) - 1
+    return (old_div((l + 7), 8)) - 1
 
   @classmethod
   def unpack_new (cls, raw, offset = 0, max_length = None):

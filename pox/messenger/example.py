@@ -28,6 +28,8 @@ channel -- it's just used like an address to send messages to.
 This is just showing that there are multiple ways to go about doing things.
 """
 
+from builtins import str
+from builtins import object
 from pox.core import core
 from pox.messenger import *
 

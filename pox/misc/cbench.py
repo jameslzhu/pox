@@ -19,6 +19,7 @@ this is intended to be comparable with ryu cbench app.
 	https://github.com/osrg/ryu/blob/master/ryu/app/cbench.py
 """
 
+from builtins import object
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
 

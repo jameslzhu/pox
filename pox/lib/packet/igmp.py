@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 # Copyright 2012 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -36,6 +37,10 @@ from __future__ import absolute_import
 
 #TODO: Support for IGMP v3
 
+from builtins import str
+from builtins import range
+from builtins import object
+from past.utils import old_div
 import struct
 from .packet_utils import *
 from .packet_base import packet_base
@@ -194,7 +199,7 @@ class GroupRecord (object):
     return offset,r
 
   def pack (self):
-    o = struct.pack("BBH", self.type, len(self.aux) / 4,
+    o = struct.pack("BBH", self.type, old_div(len(self.aux), 4),
                     len(self.source_addresses))
     o += self.address.raw
     for sa in self.source_addresses:

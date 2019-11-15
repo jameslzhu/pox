@@ -22,6 +22,11 @@ Some of these are POX-specific, and some aren't.
 
 from __future__ import print_function
 
+from builtins import chr
+from builtins import str
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 import traceback
 import struct
 import sys
@@ -200,7 +205,7 @@ def dpid_to_str (dpid, alwaysLong = False):
   """
   Convert a DPID from a long into into the canonical string form.
   """
-  if type(dpid) is long or type(dpid) is int:
+  if type(dpid) is int or type(dpid) is int:
     # Not sure if this is right
     dpid = struct.pack('!Q', dpid)
 
@@ -238,7 +243,7 @@ def assert_type(name, obj, types, none_ok=True):
   for cls in types:
     if isinstance(obj, cls):
       return True
-  allowed_types = "|".join(map(lambda x: str(x), types))
+  allowed_types = "|".join([str(x) for x in types])
   stack = traceback.extract_stack()
   stack_msg = "Function call %s() in %s:%d" % (stack[-2][2],
                                                stack[-3][0], stack[-3][1])
@@ -255,7 +260,7 @@ def init_helper (obj, kw):
   Inside a class's __init__, this will copy keyword arguments to fields
   of the same name.  See libopenflow for an example.
   """
-  for k,v in kw.items():
+  for k,v in list(kw.items()):
     if not hasattr(obj, k):
       raise TypeError(obj.__class__.__name__ + " constructor got "
       + "unexpected keyword argument '" + k + "'")
@@ -455,7 +460,7 @@ def hexdump (data):
     data = [ord(c) for c in data]
   o = ""
   def chunks (data, length):
-    return (data[i:i+length] for i in xrange(0, len(data), length))
+    return (data[i:i+length] for i in range(0, len(data), length))
   def filt (c):
     if c >= 32 and c <= 126: return chr(c)
     return '.'
@@ -507,7 +512,7 @@ def connect_socket_with_backoff (address, port, max_backoff_seconds=32):
 
 
 try:
-  _scalar_types = (int, long, basestring, float, bool)
+  _scalar_types = (int, int, basestring, float, bool)
 except NameError:
   _scalar_types = (int, str, float, bool)
 
@@ -546,7 +551,7 @@ def fields_of (obj, primitives_only=False,
       if not isinstance(v, _scalar_types):
         continue
     elif primitives_and_composites_only:
-      if not isinstance(v, (int, long, basestring, float, bool, set,
+      if not isinstance(v, (int, int, basestring, float, bool, set,
                             dict, list)):
         continue
     #r.append((k,v))

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from builtins import object
 from pox.lib.addresses import *
 import pox.lib.packet as pkt
 

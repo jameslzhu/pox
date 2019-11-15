@@ -27,6 +27,12 @@ component (but remote, multi-instance, and executing cooperatively).
 """
 from __future__ import print_function
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import chr
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 from pox.core import core
 from pox.lib.ioworker.workers import *
 from pox.lib.ioworker import *
@@ -1729,7 +1735,7 @@ class PythonTelnetPersonality (TelnetPersonality):
     oldout = sys.stdout
     olderr = sys.stderr
     oldin = sys.stdin
-    from StringIO import StringIO
+    from io import StringIO
     sys.stdout = StringIO()
     sys.stderr = sys.stdout
     # Sometime in the future something like this may be more useful...

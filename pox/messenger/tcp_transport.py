@@ -16,6 +16,7 @@
 Active (connect) and passive (listen) TCP transports for messenger.
 """
 
+from builtins import str
 from pox.lib.revent import *
 from pox.lib.recoco import *
 from pox.core import core

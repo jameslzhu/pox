@@ -40,8 +40,15 @@ CherryPy, but I did want to include a simple, dependency-free web solution.
 """
 from __future__ import absolute_import
 
-from SocketServer import ThreadingMixIn
-from BaseHTTPServer import *
+from future import standard_library
+standard_library.install_aliases()
+from builtins import chr
+from builtins import str
+from builtins import map
+from builtins import range
+from builtins import object
+from socketserver import ThreadingMixIn
+from http.server import *
 from time import sleep
 import select
 import threading
@@ -53,13 +60,13 @@ from pox.core import core
 import os
 import socket
 import posixpath
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import cgi
 import errno
 try:
-    from cStringIO import StringIO
+    from io import StringIO
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO
 
 log = core.getLogger()
 try:
@@ -105,7 +112,7 @@ class ShutdownHelper (object):
     cc = dict(self.sockets)
     self.sockets.clear()
     #if cc: log.debug("Shutting down %s socket(s)", len(cc))
-    for s,(r,w,c) in cc.items():
+    for s,(r,w,c) in list(cc.items()):
       try:
         if r and w: flags = socket.SHUT_RDWR
         elif r: flags = socket.SHUT_RD
@@ -135,8 +142,8 @@ class ShutdownHelper (object):
 _shutdown_helper = ShutdownHelper()
 
 
-import SimpleHTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+import http.server
+from http.server import SimpleHTTPRequestHandler
 
 
 class SplitRequestHandler (BaseHTTPRequestHandler):
@@ -217,7 +224,7 @@ _favicon = ("47494638396110001000c206006a5797927bc18f83ada9a1bfb49ceabda"
  + "1c038d4e27a0f2004e081e2172a4051942abba260309ea6b805ab501581ae3129d90"
  + "1275c6404b80a72f5abcd4a2454cb334dbd9e58e74693b97425e07002003b")
 _favicon = ''.join([chr(int(_favicon[n:n+2],16))
-                   for n in xrange(0,len(_favicon),2)])
+                   for n in range(0,len(_favicon),2)])
 
 class CoreHandler (SplitRequestHandler):
   """
@@ -256,7 +263,7 @@ class CoreHandler (SplitRequestHandler):
       r += "<li>%s - %s</li>\n" % (cgi.escape(str(k)), cgi.escape(str(v)))
     r += "</ul>\n\n<h2>Web Prefixes</h2>"
     r += "<ul>"
-    m = [map(cgi.escape, map(str, [x[0],x[1],x[1].format_info(x[3])]))
+    m = [list(map(cgi.escape, list(map(str, [x[0],x[1],x[1].format_info(x[3])]))))
          for x in self.args.matches]
     m.sort()
     for v in m:
@@ -315,7 +322,7 @@ class StaticContentHandler (SplitRequestHandler, SimpleHTTPRequestHandler):
     parts = path.rstrip("/").split("/")
     r.write('<a href="/">/</a>')
     for i,part in enumerate(parts):
-      link = urllib.quote("/".join(parts[:i+1]))
+      link = urllib.parse.quote("/".join(parts[:i+1]))
       if i > 0: part += "/"
       r.write('<a href="%s">%s</a>' % (link, cgi.escape(part)))
     r.write("\n" + "-" * (0+len(path)) + "\n")
@@ -330,7 +337,7 @@ class StaticContentHandler (SplitRequestHandler, SimpleHTTPRequestHandler):
         files.append(f)
 
     def entry (n, rest=''):
-      link = urllib.quote(n)
+      link = urllib.parse.quote(n)
       name = cgi.escape(n)
       r.write('<a href="%s">%s</a>\n' % (link,name+rest))
 
@@ -394,7 +401,7 @@ def wrapRequestHandler (handlerClass):
               (SplitRequestHandler, handlerClass, object), {})
 
 
-from CGIHTTPServer import CGIHTTPRequestHandler
+from http.server import CGIHTTPRequestHandler
 class SplitCGIRequestHandler (SplitRequestHandler,
                               CGIHTTPRequestHandler, object):
   """

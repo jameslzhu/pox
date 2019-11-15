@@ -1,4 +1,5 @@
 from __future__ import print_function
+from __future__ import division
 # Copyright 2012,2013 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +17,14 @@ from __future__ import print_function
 # For lots of documentation, see Open vSwitch's nicira-ext.h and ofp-msgs.h
 
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import zip
+from builtins import str
+from builtins import range
+from past.builtins import basestring
+from past.utils import old_div
+from builtins import object
 from pox.core import core
 from pox.lib.util import initHelper
 from pox.lib.util import hexdump
@@ -397,7 +406,7 @@ class nx_flow_mod (of.ofp_flow_mod, of.ofp_vendor_base):
                           self.flags, match_len)
     packed += _PAD6
     packed += match
-    packed += _PAD * ((match_len + 7)/8*8 - match_len)
+    packed += _PAD * (old_div((match_len + 7),8)*8 - match_len)
     for i in self.actions:
       packed += i.pack()
 
@@ -1463,7 +1472,7 @@ class _field_and_match (object):
     c = _nxm_type_to_class.get(t)
     if c is None:
       attrs = {'_nxm_type':t}
-      attrs['_nxm_length'] = length/2 if has_mask else length
+      attrs['_nxm_length'] = old_div(length,2) if has_mask else length
       c = type('nxm_type_'+str(t), (NXM_GENERIC,), attrs)
     return c
 
@@ -1758,7 +1767,7 @@ class _nxm_tcp_flags (_nxm_numeric):
   """
   def _pack_mask (self, v):
     assert self._nxm_length == 2
-    assert isinstance(v, (int, long))
+    assert isinstance(v, (int, int))
     if (v & 0xf000) != 0:
       raise RuntimeError("Top bits of TCP flags mask must be 0")
     return struct.pack("!H", v)
@@ -1799,7 +1808,7 @@ class _nxm_ip (object):
   def _unpack_value (self, v):
     return IPAddr(v, networkOrder=True)
   def _pack_mask (self, v):
-    if isinstance(v, (int, long)):
+    if isinstance(v, (int, int)):
       # Assume CIDR
       if v > 32: v = 32
       elif v < 0: v = 0
@@ -1832,7 +1841,7 @@ class _nxm_ipv6 (object):
       assert len(value) == 2
       ip = value[0]
       self.mask = value[1]
-    elif isinstance(value, (unicode,str)):
+    elif isinstance(value, (str,str)):
       ip,mask = IPAddr6.parse_cidr(value, allow_host = True)
       #self.mask = 128 if mask is None else mask
       self.mask = mask
@@ -1846,7 +1855,7 @@ class _nxm_ipv6 (object):
   def _unpack_value (self, v):
     return IPAddr6(v, raw=True)
   def _pack_mask (self, v):
-    if isinstance(v, (int,long)):
+    if isinstance(v, (int,int)):
       # Assume CIDR
       if v > 128: v = 128
       elif v < 0: v = 0
@@ -1918,8 +1927,8 @@ class nxm_entry (object):
     mask = None
     if has_mask:
       assert not (length & 1), "Odd length with mask"
-      mask = data[length/2:]
-      data = data[:length/2]
+      mask = data[old_div(length,2):]
+      data = data[:old_div(length,2)]
 
     #NOTE: Should use _class_for_nxm_header?
     c = _nxm_type_to_class.get(t)
@@ -2142,8 +2151,8 @@ def _make_nxm (__name, __vendor, __field, __len = None, type = None,
   t = _make_type(__vendor, __field)
   kw['_nxm_type'] = t
   if __len is not None: kw['_nxm_length'] = __len
-  import __builtin__
-  typ = __builtin__.type
+  import builtins
+  typ = builtins.type
   c = typ(__name, tuple(type), kw)
   _nxm_type_to_class[t] = c
   _nxm_name_to_type[__name] = t
@@ -2430,7 +2439,7 @@ class nxt_packet_in (nicira_base, of.ofp_packet_in):
                           match_len)
     packed += _PAD6
     packed += match.pack()
-    packed += _PAD * ((match_len + 7)/8*8 - match_len)
+    packed += _PAD * (old_div((match_len + 7),8)*8 - match_len)
     packed += _PAD2
     packed += self.packed_data
     return packed

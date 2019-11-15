@@ -31,7 +31,12 @@ something that used to be connected to one thing now connects to
 another thing) and has fairly different behavior in general, so we
 still have the spanning_tree module too (for now).
 """
+from __future__ import division
 
+from past.builtins import cmp
+from builtins import range
+from builtins import object
+from past.utils import old_div
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
 from pox.lib.util import dpid_to_str
@@ -63,7 +68,7 @@ class Port (object):
     # to.  So waiting actually kills discovery.  So we only wait
     # a little while, hoping that it'll be enough to stop any
     # worst case behavior.
-    return self.age < core.openflow_discovery.send_cycle_time / 4
+    return self.age < old_div(core.openflow_discovery.send_cycle_time, 4)
 
   @property
   def age (self):
@@ -287,9 +292,14 @@ class LinkData (object):
   def __hash__ (self):
     return hash(self.link)
 
-  def __cmp__ (self, other):
+  def __eq__ (self, other):
     if isinstance(other, LinkData):
-      return cmp(self.link, other.link)
+      return self.link == other.link
+    raise RuntimeError("Bad comparison") # Don't do this
+
+  def __lt__ (self, other):
+    if isinstance(other, LinkData):
+      return self.link < other.link
     raise RuntimeError("Bad comparison") # Don't do this
 
 
@@ -470,7 +480,7 @@ class SpanningForest (object):
     prev = getattr(self, "_prev", [])
     self._prev = used
     if stable:
-      for i in xrange(len(prev)-1, -1, -1):
+      for i in range(len(prev)-1, -1, -1):
         l = prev[i]
         if l.link in links:
           del links[l.link]

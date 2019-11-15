@@ -89,6 +89,10 @@ from __future__ import absolute_import
 #   SOA data
 #   General cleaup/rewrite (code is/has gotten pretty bad)
 
+from builtins import chr
+from builtins import str
+from builtins import range
+from builtins import object
 import struct
 from .packet_utils import *
 from .packet_utils import TruncatedException as Trunc
@@ -464,7 +468,7 @@ class dns(packet_base):
 
     # Utility classes for questions and RRs
 
-    class question:
+    class question(object):
 
         def __init__(self, name, qtype, qclass):
             self.name   = name

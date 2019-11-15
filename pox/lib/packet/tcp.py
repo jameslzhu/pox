@@ -1,4 +1,5 @@
 from __future__ import absolute_import
+from __future__ import division
 # Copyright 2011,2013,2014 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -43,6 +44,11 @@ from __future__ import absolute_import
 #
 #======================================================================
 
+from builtins import bytes
+from builtins import str
+from builtins import zip
+from builtins import object
+from past.utils import old_div
 import struct
 from .packet_utils import *
 from socket import htons
@@ -119,7 +125,7 @@ class tcp_opt (object):
         raise RuntimeError("SACKPERM option length != 2")
     elif o.type == tcp_opt.SACK:
       if length >= 2 and ((length-2) % 8) == 0:
-        num = (length - 2) / 8
+        num = old_div((length - 2), 8)
         val = struct.unpack("!" + "II" * num, arr[i+2:])
         val = [(x,y) for x,y in zip(val[0::2],val[1::2])]
         o.val = val
@@ -672,7 +678,7 @@ class tcp (packet_base):
     assert hdr_len % 4 == 0
 
     if calc_off:
-        self.off = hdr_len / 4
+        self.off = old_div(hdr_len, 4)
 
     offres = self.off << 4 | self.res
     header = struct.pack('!HHIIBBHHH',
@@ -704,12 +710,12 @@ class tcp (packet_base):
     else:
       if payload is not None:
         pass
-      elif isinstance(self.next, packet_base):
+      elif isinstance(self.__next__, packet_base):
         payload = self.next.pack()
-      elif self.next is None:
+      elif self.__next__ is None:
         payload = bytes()
       else:
-        payload = self.next
+        payload = self.__next__
       payload = self.hdr(None, calc_checksum = False) + payload
       payload_len = len(payload)
 

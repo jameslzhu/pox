@@ -23,6 +23,7 @@ just do:
   misc.tweak=some.thing.Somewhere.value --value=42
 """
 
+from builtins import range
 import sys
 from pox.lib.config_eval import eval_one
 from pox.core import core

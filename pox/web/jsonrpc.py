@@ -102,7 +102,7 @@ class JSONRPCHandler (SplitRequestHandler):
     # Maybe the following arg-adding feature should just be part of
     # SplitRequestHandler?
 
-    for k,v in self.args.items():
+    for k,v in list(self.args.items()):
       setattr(self, "_arg_" + k, v)
 
     self.auth_function = self.args.get('auth', None)

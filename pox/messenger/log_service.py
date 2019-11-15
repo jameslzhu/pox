@@ -26,6 +26,9 @@ It does two things:
      the message formats, etc.  See LogService for more details.
 """
 
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 from pox.core import core
 from pox.messenger import *
 from pox.lib.revent.revent import autoBindEvents
@@ -132,7 +135,7 @@ class LogHandler (logging.Handler):
     if "setLevels" in params:
       levels = params['setLevels']
       if isinstance(levels, dict):
-        for k,v in levels.items():
+        for k,v in list(levels.items()):
           l = core.getLogger(k)
           l.setLevel(v)
       else:
@@ -188,18 +191,18 @@ def _process_commands (msg):
   raiseLevels = get("raiseLevels") # more verbose
   setLevels = get("setLevels")
 
-  for k,v in lowerLevels.items():
+  for k,v in list(lowerLevels.items()):
     logger = core.getLogger(k)
     level = logging._checkLevel(v)
     if not l.isEnabledFor(level+1):
       logger.setLevel(v)
 
-  for k,v in raiseLevels.items():
+  for k,v in list(raiseLevels.items()):
     logger = core.getLogger(k)
     if not l.isEnabledFor(v):
       logger.setLevel(v)
 
-  for k,v in setLevels.items():
+  for k,v in list(setLevels.items()):
     logger = core.getLogger(k)
     logger.setLevel(v)
 

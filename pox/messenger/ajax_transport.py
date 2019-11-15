@@ -22,6 +22,7 @@ A disclaimer:
   names like HTTPJSONRPCConnection and I just couldn't take it.
 """
 
+from builtins import str
 import time
 import select
 import threading
@@ -48,7 +49,7 @@ class AjaxTransport (Transport):
     self._t = Timer(SESSION_TIMEOUT, self._check_timeouts, recurring=True)
 
   def _check_timeouts (self):
-    for c in self._connections.values():
+    for c in list(self._connections.values()):
       c._check_timeout()
 
   def _forget (self, connection):

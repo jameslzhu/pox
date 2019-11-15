@@ -33,6 +33,7 @@ or on the commandline like:
   web.authentication:basic --user1=password1
 """
 
+from builtins import object
 from pox.core import core
 
 import base64
@@ -145,7 +146,7 @@ def basic (__INSTANCE__=None, **kw):
   Lets you add username/password pairs to root of POX webserver
   """
   from pox.web.webcore import SplitterRequestHandler
-  for k,v in kw.items():
+  for k,v in list(kw.items()):
     SplitterRequestHandler.basic_auth_info[k] = v
 
   # Since you called this explicitly, force auth on regardless of

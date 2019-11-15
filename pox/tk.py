@@ -28,7 +28,7 @@ log = core.getLogger()
 
 class MessageBoxer (object):
   def __init__ (self, tk):
-    import tkMessageBox, tkColorChooser, tkSimpleDialog, tkFileDialog
+    import tkinter.messagebox, tkinter.colorchooser, tkinter.simpledialog, tkinter.filedialog
     fields = "ERROR INFO QUESTION WARNING ABORTRETRYIGNORE OKCANCEL "
     fields += "RETRYCANCEL YESNO YESNOCANCEL ABORT RETRY IGNORE OK "
     fields += "CANCEL YES NO"
@@ -101,8 +101,8 @@ class Tk (object):
     if rv: core.callLater(rv, r)
 
   def run (self):
-    import Tkinter
-    root = Tkinter.Tk()
+    import tkinter
+    root = tkinter.Tk()
     root.bind('<<Ping>>', self._dispatch)
 
     self.root = root

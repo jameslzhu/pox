@@ -46,12 +46,19 @@ from __future__ import absolute_import
 
 #TODO: Make virtual ports easily reusable by other switch subclasses.
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import zip
+from builtins import chr
+from past.builtins import basestring
+from builtins import object
 from pox.core import core
 from pox.datapaths import do_launch
 from pox.datapaths.switch import SoftwareSwitchBase, OFConnection
 from pox.datapaths.switch import ExpireMixin
 import pox.lib.pxpcap as pxpcap
-from Queue import Queue
+from queue import Queue
 from threading import Thread
 import pox.openflow.libopenflow_01 as of
 from pox.lib.packet import ethernet

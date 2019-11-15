@@ -16,6 +16,7 @@
 Reusable ARP table
 """
 
+from builtins import object
 import time
 from pox.lib.recoco import Timer
 from pox.core import core
@@ -94,7 +95,7 @@ class ARPTable (object):
     if len(self.by_ip) >= self.MAX_ENTRIES:
       # Sloppy, but simple.
       # Get ones with lowest age
-      entries = sorted(self.by_ip.values(), key = lambda entry: entry.age)
+      entries = sorted(list(self.by_ip.values()), key = lambda entry: entry.age)
       del entries[self.MAX_ENTRIES:]
       self.by_ip = {e.mac:e for e in entries}
     new_entry = ARPEntry(ip=ip, mac=mac)

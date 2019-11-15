@@ -33,11 +33,16 @@ This file parses ICMPv6 as well as NDP
 See RFCs 4443 and 4861 in particular.
 """
 from __future__ import absolute_import
+from __future__ import division
 
 #TODO: Move NDP into its own file?
 #TODO: Clean this up in general
 #TODO: Write tests (at least pack/unpack)
 
+from builtins import chr
+from builtins import str
+from builtins import object
+from past.utils import old_div
 import struct
 import random
 from .packet_utils import *
@@ -226,7 +231,7 @@ class NDOptionBase (packet_base):
   def pack (self):
     d = self._pack_body()
     while (len(d)+2) % 8: d += "\x00" # sloppy
-    return struct.pack("BB", self.TYPE, (len(d)+2)/8) + d
+    return struct.pack("BB", self.TYPE, old_div((len(d)+2),8)) + d
 
   @classmethod
   def _unpack_new (cls, raw, offset, t, length, prev):

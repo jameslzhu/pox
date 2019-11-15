@@ -23,6 +23,7 @@ arp_responder should be refactored to use this.  Also, it should be possible
 to have a simple ARP learner which keeps an ARP table without responding...
 """
 
+from builtins import str
 from pox.core import core
 import pox
 log = core.getLogger()
@@ -97,7 +98,7 @@ def send_arp_request (connection, ip, port = of.OFPP_FLOOD,
     src_mac = connection.eth_addr
   elif src_mac is True:
     if port in (of.OFPP_FLOOD, of.OFPP_ALL):
-      for p in connection.ports.values():
+      for p in list(connection.ports.values()):
         if p.config & OFPPC_NO_FLOOD:
           if port == of.ofPP_FLOOD:
             continue

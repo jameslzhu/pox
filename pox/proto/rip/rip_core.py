@@ -20,7 +20,10 @@ actually implement a RIP router.
 
 We're not quite RFC 2453 compliant; patches to address this are welcome!
 """
+from __future__ import division
 
+from builtins import object
+from past.utils import old_div
 from pox.core import core
 from pox.lib.addresses import IPAddr, parse_cidr
 import pox.lib.packet as pkt
@@ -126,7 +129,7 @@ class Entry (object):
   def is_stale (self):
     if self.static: return False
     if self.ts is None: return False
-    return (time.time() - self.ts) > self.TIMEOUT / 2
+    return (time.time() - self.ts) > old_div(self.TIMEOUT, 2)
 
   def refresh (self):
     if self.static: return
@@ -206,7 +209,7 @@ class RIPRouter (object):
   def get_responses (self, dests, force, static_only=False, mtu=DEFAULT_MTU):
     # 3.10.2
     outgoing = []
-    for e in self.table.values():
+    for e in list(self.table.values()):
       if not (e.changed or force): continue
       if static_only and not e.static: continue
       re = RIP.RIPEntry()
@@ -335,7 +338,7 @@ class RIPRouter (object):
     Mark all entries as having been sent
     """
     # Mark nothing changed
-    for e in self.table.values():
+    for e in list(self.table.values()):
       e.changed = False
 
   def _get_port_ip_map (self):
@@ -349,7 +352,7 @@ class RIPRouter (object):
     for "dev" entries.
     """
     direct = {} # iface -> set(ip)
-    for e in self.table.values():
+    for e in list(self.table.values()):
       if e.dev and not e.local:
         if e.size != 32: continue
         if e.dev not in direct:

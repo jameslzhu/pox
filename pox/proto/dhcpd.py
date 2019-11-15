@@ -19,6 +19,10 @@ This is currently missing lots of features and sort of limited with
 respect to subnets and so on, but it's a start.
 """
 
+from builtins import map
+from builtins import str
+from builtins import range
+from builtins import object
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
 import pox.lib.packet as pkt
@@ -242,7 +246,7 @@ class DHCPD (EventMixin):
       self.dpid = None
     else:
       try:
-        dpid = long(dpid)
+        dpid = int(dpid)
       except:
         dpid = util.str_to_dpid(dpid)
       self.dpid = dpid
@@ -597,8 +601,8 @@ def launch (no_flow = False,
     if i.lower() == "true": return None
     if i == '()': return ()
     return i
-  first,last,count = map(fixint,(first,last,count))
-  router,dns = map(fix,(router,dns))
+  first,last,count = list(map(fixint,(first,last,count)))
+  router,dns = list(map(fix,(router,dns)))
 
   if ports is not None:
     ports = ports.split(",")

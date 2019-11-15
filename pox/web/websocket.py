@@ -29,6 +29,7 @@ to the browser and take a bit of log configuration from the browser.
 Launch it with web.websocket:log_service.
 """
 
+from builtins import chr
 import socket
 import threading
 
@@ -411,7 +412,7 @@ class LogWebsocketHandler (WebsocketHandler):
     import json
     import logging
     msg = json.loads(msg)
-    for k,v in msg.items():
+    for k,v in list(msg.items()):
       logging.getLogger(k).setLevel(v)
 
   def _on_start (self):

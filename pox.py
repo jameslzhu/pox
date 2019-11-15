@@ -29,6 +29,10 @@ if [ "$(basename $0)" = "debug-pox.py" ]; then
   export FLG="--debug"
 fi
 
+if type python3 > /dev/null 2> /dev/null; then
+  exec python3 $OPT "$0" $FLG "$@"
+fi
+
 if [ -x pypy/bin/pypy ]; then
   exec pypy/bin/pypy $OPT "$0" $FLG "$@"
 fi

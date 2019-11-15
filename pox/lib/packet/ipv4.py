@@ -39,7 +39,9 @@
 #======================================================================
 
 from __future__ import absolute_import
+from __future__ import division
 
+from past.utils import old_div
 import struct
 import time
 from .packet_utils       import *
@@ -76,7 +78,7 @@ class ipv4(packet_base):
         self.prev = prev
 
         self.v     = 4
-        self.hl    = ipv4.MIN_LEN / 4
+        self.hl    = old_div(ipv4.MIN_LEN, 4)
         self.tos   = 0
         self.iplen = ipv4.MIN_LEN
         ipv4.ip_id = (ipv4.ip_id + 1) & 0xffff
@@ -171,7 +173,7 @@ class ipv4(packet_base):
         else:
             self.next =  raw[self.hl*4:length]
 
-        if isinstance(self.next, packet_base) and not self.next.parsed:
+        if isinstance(self.__next__, packet_base) and not self.next.parsed:
             self.next = raw[self.hl*4:length]
 
     def checksum(self):

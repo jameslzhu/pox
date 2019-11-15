@@ -54,6 +54,12 @@ from __future__ import absolute_import
 #   +---------------------------------------------------------------+
 #
 #======================================================================
+from builtins import bytes
+from builtins import chr
+from builtins import str
+from builtins import range
+from past.builtins import basestring
+from builtins import object
 import struct
 import string
 from .packet_utils import *

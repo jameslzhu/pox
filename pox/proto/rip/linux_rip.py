@@ -26,6 +26,7 @@ from __future__ import absolute_import
 # * Use interfaceio for dealing with interfaces?
 
 
+from builtins import str
 from pox.core import core
 from pox.lib.addresses import IPAddr, parse_cidr
 import pox.lib.packet
@@ -140,7 +141,7 @@ class LinuxRIPRouter (RIPRouter, Task):
 
   def run (self):
     while True:
-      rr,ww,oo = yield Select(self.sock_to_iface.keys(), [], [])
+      rr,ww,oo = yield Select(list(self.sock_to_iface.keys()), [], [])
       for r in rr:
         #data,addr = yield RecvFrom(sock, 65535)
         data,addr = r.recvfrom(65535)
@@ -213,7 +214,7 @@ class LinuxRIPRouter (RIPRouter, Task):
       if k not in self.table:
         remove.add(k)
 
-    for e in self.table.values():
+    for e in list(self.table.values()):
       if e.local: continue
       if e.key not in cur:
         add.append(e)
@@ -252,7 +253,7 @@ class LinuxRIPRouter (RIPRouter, Task):
   def send_updates (self, force):
     direct = self._get_port_ip_map()
 
-    for sock,iface in self.sock_to_iface.items():
+    for sock,iface in list(self.sock_to_iface.items()):
       dests = direct.get(iface)
       responses = self.get_responses(dests, force=force)
       self.log.debug("Sending %s RIP packets via %s", len(responses), iface)

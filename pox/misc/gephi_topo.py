@@ -26,6 +26,8 @@ Requires discovery.  host_tracker is optional.
 pox.py openflow.discovery misc.gephi_topo host_tracker forwarding.l2_learning
 """
 
+from builtins import str
+from builtins import object
 from pox.core import core
 from pox.lib.util import dpid_to_str
 from pox.lib.ioworker.workers import *
@@ -41,9 +43,9 @@ clients = set()
 class GephiHTTPWorker (RecocoIOWorker):
   # HTTP worker input states.  It'd be nice to reuse the web component, but
   # it seemed a bit awkward with Gephi's (sort of unusual) streaming.
-  class HEADER: pass
-  class BODY: pass
-  class DEAD: pass
+  class HEADER(object): pass
+  class BODY(object): pass
+  class DEAD(object): pass
 
   def __init__ (self, *args, **kw):
     super(GephiHTTPWorker, self).__init__(*args, **kw)
@@ -166,7 +168,7 @@ class GephiTopo (object):
       out.append(an(s, kind='switch'))
     for e in self.links:
       out.append(ae(e[0],e[1]))
-    for h,s in self.hosts.items():
+    for h,s in list(self.hosts.items()):
       out.append(an(h, kind='host'))
       if s in self.switches:
         out.append(ae(h,s))
@@ -220,7 +222,7 @@ class GephiTopo (object):
       self.send(ae(s1,s2))
 
       # Do we have abandoned hosts?
-      for h,s in self.hosts.items():
+      for h,s in list(self.hosts.items()):
         if s == s1: self.send(ae(h,s1))
         elif s == s2: self.send(ae(h,s2))
 

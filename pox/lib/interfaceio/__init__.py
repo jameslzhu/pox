@@ -21,8 +21,13 @@ interface to network interfaces.
 Currently limited to Linux.
 """
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
+from builtins import object
 from pox.lib.pxpcap import PCap
-from Queue import Queue
+from queue import Queue
 from pox.lib.revent import Event, EventMixin
 from pox.lib.ioworker.io_loop import ReadLoop
 from pox.core import core
@@ -429,7 +434,7 @@ class Interface (object):
     if isinstance(network, tuple):
       addr,mask = network
       addr = str(addr)
-      if isinstance(mask, (int,long)):
+      if isinstance(mask, (int,int)):
         mask = cidr_to_netmask(mask)
       mask = str(mask)
       network = "%s/%s" % (addr,mask)
@@ -568,7 +573,7 @@ class PCapInterface (Interface, EventMixin):
 
   def _queue_read (self):
     anything = False
-    for _ in xrange(10): # as most X at once
+    for _ in range(10): # as most X at once
       try:
         data = self._q.get(False)
         self._q.task_done()

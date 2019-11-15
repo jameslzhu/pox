@@ -643,10 +643,10 @@ class PortCollection (object):
     return "<Ports: %s>" % (", ".join(l),)
 
   def __len__ (self):
-    return len(self.keys())
+    return len(list(self.keys()))
 
   def __getitem__ (self, index):
-    if isinstance(index, (int,long)):
+    if isinstance(index, (int,int)):
       for p in self._ports:
         if p.port_no == index:
           return p

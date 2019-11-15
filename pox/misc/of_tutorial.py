@@ -21,6 +21,7 @@ learning switch.
 It's roughly similar to the one Brandon Heller did for NOX.
 """
 
+from builtins import object
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
 

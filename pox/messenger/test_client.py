@@ -19,6 +19,8 @@ This is NOT a POX component.  It's a little tool to test out the messenger.
 """
 from __future__ import print_function
 
+from builtins import input
+from builtins import object
 import socket
 import threading
 import json
@@ -79,7 +81,7 @@ def main (addr = "127.0.0.1", port = 7790):
   while not done:
     try:
       #print ">",
-      m = raw_input()
+      m = input()
       if len(m) == 0: continue
       m = eval(m)
       if not isinstance(m, dict):

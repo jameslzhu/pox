@@ -15,10 +15,12 @@
 # limitations under the License.
 
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 import unittest
 import sys
 import os.path
-import SocketServer
+import socketserver
 import threading
 import socket
 import signal
@@ -29,13 +31,13 @@ sys.path.append(os.path.dirname(__file__) + "/../../..")
 
 from pox.lib.epoll_select import EpollSelect
 
-class TCPEcho(SocketServer.StreamRequestHandler):
+class TCPEcho(socketserver.StreamRequestHandler):
   def handle(self):
     data = self.rfile.readline()
     print("got data: %s" % data)
     self.wfile.write(data)
 
-class ForkingTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
+class ForkingTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
   def start(self):
     self.pid = os.fork()
     if self.pid == 0:
