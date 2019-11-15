@@ -19,6 +19,7 @@ Classes and utilities for addresses of various types.
 from __future__ import print_function
 import struct
 import socket
+from functools import total_ordering
 
 import sys
 if sys.version_info < (3,):
@@ -72,6 +73,7 @@ _load_oui_names()
 
 
 
+@total_ordering
 class EthAddr (object):
   """
   An Ethernet (MAC) address type.
@@ -220,18 +222,26 @@ class EthAddr (object):
   def __str__ (self):
     return self.toStr()
 
-  def __cmp__ (self, other):
-    #TODO: Revisit this and other __cmp__ in Python 3.4
+  def __eq__(self, other):
+    if type(other) == EthAddr:
+      other = other.value
+    elif type(other) == bytes:
+      pass
+    else:
+      other = EthAddr(other)._value
+    return self._value == other
+
+  def __lt__(self, other):
     try:
       if type(other) == EthAddr:
-        other = other._value
+        other = other.value
       elif type(other) == bytes:
         pass
       else:
         other = EthAddr(other)._value
-      return cmp(self._value, other)
+      return self._value < other
     except:
-      return -cmp(other, self)
+      return not (other <= self._value)
 
   def __hash__ (self):
     return self._value.__hash__()
@@ -400,14 +410,23 @@ class IPAddr (object):
   def __str__ (self):
     return self.toStr()
 
-  def __cmp__ (self, other):
-    if other is None: return 1
+  def __eq__ (self, other):
+    if other is None: return False
     try:
       if not isinstance(other, IPAddr):
         other = IPAddr(other)
-      return cmp(self.toUnsigned(), other.toUnsigned())
+      return self.toUnsigned() == other.toUnsigned()
     except:
-      return -other.__cmp__(self)
+      return False
+
+  def __lt__ (self, other):
+    if other is None: return False
+    try:
+      if not isinstance(other, IPAddr):
+        other = IPAddr(other)
+      return self.toUnsigned() < other.toUnsigned()
+    except:
+      return not (other <= self)
 
   def __hash__ (self):
     return self._value.__hash__()
@@ -429,6 +448,7 @@ IP_BROADCAST = IPAddr("255.255.255.255")
 
 
 
+@total_ordering
 class IPAddr6 (object):
   """
   Represents an IPv6 address.
@@ -750,14 +770,14 @@ class IPAddr6 (object):
   def __str__ (self):
     return self.to_str()
 
-  def __cmp__ (self, other):
+  def __lt__ (self, other):
     if other is None: return 1
     try:
       if not isinstance(other, type(self)):
         other = type(self)(other)
-      return cmp(self._value, other._value)
+      return self._value < other._value
     except:
-      return -cmp(other,self)
+      return not (other <= self)
 
   def __hash__ (self):
     return self._value.__hash__()
