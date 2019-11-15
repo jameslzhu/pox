@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 # Copyright 2017 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,12 +35,13 @@ from __future__ import absolute_import
 #
 #======================================================================
 
+from __future__ import absolute_import
+
 import struct
 
 from .packet_base import packet_base
 from .packet_utils import checksum
 from .ethernet import ethernet
-from . import ipv4
 
 from .packet_utils import *
 
@@ -101,6 +101,7 @@ class gre (packet_base):
         return s + "]"
 
     def parse(self, raw):
+        from . import ipv4
         assert isinstance(raw, bytes)
         self.raw = raw
         dlen = len(raw)

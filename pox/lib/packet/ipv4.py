@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 # Copyright 2011 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -39,6 +38,8 @@ from __future__ import absolute_import
 #
 #======================================================================
 
+from __future__ import absolute_import
+
 import struct
 import time
 from .packet_utils       import *
@@ -46,7 +47,7 @@ from .tcp import *
 from .udp import *
 from .icmp import *
 from .igmp import *
-from .gre import *
+from . import gre
 
 from .packet_base import packet_base
 
@@ -62,7 +63,7 @@ class ipv4(packet_base):
     TCP_PROTOCOL  = 6
     UDP_PROTOCOL  = 17
     IGMP_PROTOCOL = 2
-    GRE_PROTOCOL  = gre.PROTOCOL
+    GRE_PROTOCOL  = gre.gre.PROTOCOL
 
     DF_FLAG = 0x02
     MF_FLAG = 0x01

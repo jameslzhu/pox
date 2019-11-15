@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 # Copyright 2011 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -36,17 +35,16 @@ from __future__ import absolute_import
 #   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #
 #=====================================================================
+
+from __future__ import absolute_import
+
 import struct
 
 from .packet_base import packet_base
-from .ipv4 import ipv4
 
 from .ethernet import ethernet
 from .ethernet import ETHER_ANY
 from .ethernet import ETHER_BROADCAST
-
-from .ipv4 import IP_ANY
-from .ipv4 import IP_BROADCAST
 
 from pox.lib.addresses import IPAddr, EthAddr
 
@@ -67,6 +65,7 @@ class arp (packet_base):
     REV_REPLY   = 4 # RARP
 
     def __init__(self, raw=None, prev=None, **kw):
+        from . import ipv4
         packet_base.__init__(self)
 
         self.prev = prev
@@ -78,8 +77,8 @@ class arp (packet_base):
         self.hwlen      = 6
         self.opcode     = 0
         self.protolen   = 4
-        self.protosrc   = IP_ANY
-        self.protodst   = IP_ANY
+        self.protosrc   = ipv4.IP_ANY
+        self.protodst   = ipv4.IP_ANY
         self.next       = b''
 
         if raw is not None:
