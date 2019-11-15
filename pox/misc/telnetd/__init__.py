@@ -659,7 +659,7 @@ def _make_consts ():
     globals()[o] = v
     _optname[v] = o
 
-#  for k,v in vars(telnetlib).iteritems():
+#  for k,v in vars(telnetlib).items():
 #    if k == k.upper():
 #      if isinstance(v, basestring):
 #        if len(v) == 1:
@@ -1779,4 +1779,3 @@ def launch (username = "pox", password = None, port = 2323):
   # Register as a component
   core.registerNew(TelnetServer, personality = PythonTelnetPersonality,
                    personality_kwargs = kw, port = int(port))
-

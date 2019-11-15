@@ -119,7 +119,7 @@ class l3_switch (EventMixin):
   def _handle_expiration (self):
     # Called by a timer so that we can remove old items.
     empty = []
-    for k,v in self.lost_buffers.iteritems():
+    for k,v in self.lost_buffers.items():
       dpid,ip = k
 
       for item in list(v):
@@ -238,7 +238,7 @@ class l3_switch (EventMixin):
 
         # Expire things from our outstanding ARP list...
         self.outstanding_arps = {k:v for k,v in
-         self.outstanding_arps.iteritems() if v > time.time()}
+         self.outstanding_arps.items() if v > time.time()}
 
         # Check if we've already ARPed recently
         if (dpid,dstaddr) in self.outstanding_arps:
@@ -346,4 +346,3 @@ def launch (fakeways="", arp_for_unknowns=None, wide=False):
   else:
     arp_for_unknowns = str_to_bool(arp_for_unknowns)
   core.registerNew(l3_switch, fakeways, arp_for_unknowns, wide)
-

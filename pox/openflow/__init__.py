@@ -311,7 +311,7 @@ class OpenFlowConnectionArbiter (EventMixin):
 
 class ConnectionDict (dict):
   def __iter__ (self):
-    return self.itervalues()
+    return self.values()
 
   def __contains__ (self, item):
     v = dict.__contains__(self, item)

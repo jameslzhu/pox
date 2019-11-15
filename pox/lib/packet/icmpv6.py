@@ -40,7 +40,6 @@ from __future__ import absolute_import
 
 import struct
 import random
-import new
 from .packet_utils import *
 from .packet_base import packet_base
 
@@ -160,7 +159,7 @@ class NDOptionBase (packet_base):
     ss = self._fields()
     if ss:
       s += ' '
-      s += " ".join(["%s:%s" % (k,v) for k,v in ss.iteritems()])
+      s += " ".join(["%s:%s" % (k,v) for k,v in ss.items()])
     return "[" + s + "]"
 
   @property
@@ -257,7 +256,7 @@ class NDOptionGeneric (NDOptionBase):
 
   def __repr__ (self):
     return "<NDP Option Type %s>" % (self.TYPE,)
- 
+
   def _init (self, *args, **kw):
     self.raw = b''
 
@@ -299,7 +298,7 @@ class NDOptLinkLayerAddress (NDOptionBase):
       self.address = None
     else:
       self.address = EthAddr(a)
-  
+
   def _fields (self):
     return {'addr':self.address}
 
@@ -310,7 +309,7 @@ class NDOptLinkLayerAddress (NDOptionBase):
 
   def _pack_body (self):
     return self.address.raw
-    
+
 
 @nd_option_def
 class NDOptSourceLinkLayerAddress (NDOptLinkLayerAddress):
@@ -411,7 +410,7 @@ class icmp_base (packet_base):
     ss = self._fields()
     if ss:
       s += ' '
-      s += " ".join(["%s:%s" % (k,v) for k,v in ss.iteritems()])
+      s += " ".join(["%s:%s" % (k,v) for k,v in ss.items()])
     return s + "]"
 
   def _fields (self):

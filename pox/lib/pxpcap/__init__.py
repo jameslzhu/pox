@@ -192,7 +192,7 @@ class PCapSelectLoop (object):
       elif not xx:
         # Nothing!
         quit = []
-        for pcap in _filenos.itervalues():
+        for pcap in _filenos.values():
           if pcap._quitting: quit.append(pcap)
         if quit:
           reread = True
@@ -490,7 +490,7 @@ class Filter (object):
 
 try:
   _link_type_names = {}
-  for k,v in copy.copy(pcapc.__dict__).iteritems():
+  for k,v in copy.copy(pcapc.__dict__).items():
     if k.startswith("DLT_"):
       _link_type_names[v] = k
 except:

@@ -255,7 +255,7 @@ def init_helper (obj, kw):
   Inside a class's __init__, this will copy keyword arguments to fields
   of the same name.  See libopenflow for an example.
   """
-  for k,v in kw.iteritems():
+  for k,v in kw.items():
     if not hasattr(obj, k):
       raise TypeError(obj.__class__.__name__ + " constructor got "
       + "unexpected keyword argument '" + k + "'")
@@ -281,7 +281,7 @@ def make_pinger ():
 
     def ping (self):
       if os is None: return #TODO: Is there a better fix for this?
-      os.write(self._w, ' ')
+      os.write(self._w, b' ')
 
     def fileno (self):
       return self._r
@@ -506,7 +506,10 @@ def connect_socket_with_backoff (address, port, max_backoff_seconds=32):
   return sock
 
 
-_scalar_types = (int, long, basestring, float, bool)
+try:
+  _scalar_types = (int, long, basestring, float, bool)
+except NameError:
+  _scalar_types = (int, str, float, bool)
 
 def is_scalar (v):
   """
