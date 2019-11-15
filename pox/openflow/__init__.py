@@ -32,10 +32,11 @@ care of this for you and are only fired when all data is available.
 
 NOTE: This module is usually automatically loaded by pox.py
 """
+from __future__ import absolute_import
 
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
-import libopenflow_01 as of
+from . import libopenflow_01 as of
 from pox.lib.packet.ethernet import ethernet
 
 

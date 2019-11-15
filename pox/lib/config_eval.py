@@ -15,6 +15,7 @@
 """
 A parser/evaluator meant for configuration data
 """
+from __future__ import print_function
 
 #TODO: Rewrite as classes.
 
@@ -427,16 +428,16 @@ if __name__ == "__main__":
   functions = dict(add=lambda a,b: a+b, num=lambda:42)
   import sys
   for arg in sys.argv[1:]:
-    print arg
+    print(arg)
     try:
       r = eval_dict(arg, functions=functions)
-      print "DICT:", r
+      print("DICT:", r)
     except:
       pass
     try:
       r = eval_list(arg, functions=functions)
-      print "LIST:", r
+      print("LIST:", r)
     except:
       raise
       pass
-    print
+    print()

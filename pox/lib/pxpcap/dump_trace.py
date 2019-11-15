@@ -22,6 +22,7 @@ Use --show=<types> to show specific types.
 Use --hide=<types> to hide specific types.
 Use --max-length=<chars> to limit line lengths.
 """
+from __future__ import print_function
 
 #TODO: Refactor with packet_dump
 
@@ -79,7 +80,7 @@ def cb (data, parser):
       msg = msg[:_max_length-3]
       msg += "..."
   #core.getLogger("dump").info(msg)
-  print msg
+  print(msg)
 
 
 def launch (infile, verbose = False, max_length = 110,

@@ -17,6 +17,7 @@
 """
 This is NOT a POX component.  It's a little tool to test out the messenger.
 """
+from __future__ import print_function
 
 import socket
 import threading
@@ -44,7 +45,7 @@ class JSONDestreamer (object):
 
   def rx (self, data):
     import json
-    print "Recv:", json.dumps(data, indent=4)
+    print("Recv:", json.dumps(data, indent=4))
 
 jd = JSONDestreamer()
 done = False
@@ -66,7 +67,7 @@ def channel (ch):
 import readline
 
 def main (addr = "127.0.0.1", port = 7790):
-  print "Connecting to %s:%i" % (addr,port)
+  print("Connecting to %s:%i" % (addr,port))
   port = int(port)
 
   sock = socket.create_connection((addr, port))

@@ -57,6 +57,7 @@ a packet destined for 10.3.0.0/16 actually arrives!).
 See the source comments for info on what the various OpenFlow
 tables are used for.
 """
+from __future__ import absolute_import
 
 #TODO: Factor out the basic L3 router stuff from the RIP-specific stuff so
 #      that the former can be reused for other components.
@@ -67,7 +68,7 @@ import pox.lib.packet.rip as RIP
 import pox.lib.packet as pkt
 from pox.lib.recoco import Timer, Task
 import socket
-from rip_core import *
+from .rip_core import *
 from pox.proto.arp_helper import send_arp_reply
 from pox.proto.arp_table import ARPTable
 from pox.lib.util import dpid_to_str
@@ -136,7 +137,7 @@ class Port (object):
 
   @property
   def any_ip (self):
-    return iter(self.ips).next()
+    return next(iter(self.ips))
 
 
 

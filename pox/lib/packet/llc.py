@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2013 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +15,10 @@
 
 import struct
 
-from packet_base import packet_base
-from ethernet import ethernet
+from .packet_base import packet_base
+from .ethernet import ethernet
 
-from packet_utils import *
+from .packet_utils import *
 
 
 class llc (packet_base):

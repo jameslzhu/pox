@@ -488,7 +488,8 @@ class DeferredSender (threading.Thread):
                   alldata[0] = data[l:]
                   break
                 del alldata[0]
-              except socket.error as (errno, strerror):
+              except socket.error as xxx_todo_changeme:
+                (errno, strerror) = xxx_todo_changeme.args
                 if errno != EAGAIN:
                   con.msg("DeferredSender/Socket error: " + strerror)
                   con.disconnect()
@@ -884,7 +885,8 @@ class Connection (EventMixin):
         self.msg("Didn't send complete buffer.")
         data = data[l:]
         deferredSender.send(self, data)
-    except socket.error as (errno, strerror):
+    except socket.error as xxx_todo_changeme1:
+      (errno, strerror) = xxx_todo_changeme1.args
       if errno == EAGAIN:
         self.msg("Out of send buffer space.  " +
                  "Consider increasing SO_SNDBUF.")
@@ -996,7 +998,7 @@ class Connection (EventMixin):
 def wrap_socket (new_sock):
   fname = datetime.datetime.now().strftime("%Y-%m-%d-%I%M%p")
   fname += "_" + new_sock.getpeername()[0].replace(".", "_")
-  fname += "_" + `new_sock.getpeername()[1]` + ".pcap"
+  fname += "_" + repr(new_sock.getpeername()[1]) + ".pcap"
   pcapfile = file(fname, "w")
   try:
     new_sock = OFCaptureSocket(new_sock, pcapfile,
@@ -1057,7 +1059,8 @@ class OpenFlow_01_Task (Task):
     listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     try:
       listener.bind((self.address, self.port))
-    except socket.error as (errno, strerror):
+    except socket.error as xxx_todo_changeme2:
+      (errno, strerror) = xxx_todo_changeme2.args
       log.error("Error %i while binding %s:%s: %s",
                 errno, self.address, self.port, strerror)
       if errno == EADDRNOTAVAIL:

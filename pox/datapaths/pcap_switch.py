@@ -42,6 +42,7 @@ That connects the first switch's eth1 to the second switch's eth2 via
 a virtual channel called "A".  And the second switch has a virtual
 port called eth1 which isn't connected to anything.
 """
+from __future__ import absolute_import
 
 #TODO: Make virtual ports easily reusable by other switch subclasses.
 
@@ -304,7 +305,7 @@ def launch (address = '127.0.0.1', port = 6633, max_retry_delay = 16,
       # We can reuse the exiting one
     else:
       # Create one...
-      import ctl
+      from . import ctl
       ctl.server(ctl_port)
       core.ctld.addListenerByName("CommandEvent", _do_ctl)
 

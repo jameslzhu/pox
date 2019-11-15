@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011,2012,2013 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -23,8 +24,8 @@
 
 import struct
 
-from packet_base import packet_base
-from packet_utils import ethtype_to_str
+from .packet_base import packet_base
+from .packet_utils import ethtype_to_str
 
 from pox.lib.addresses import *
 
@@ -75,23 +76,23 @@ class ethernet(packet_base):
     packet_base.__init__(self)
 
     if len(ethernet.type_parsers) == 0:
-      from vlan import vlan
+      from .vlan import vlan
       ethernet.type_parsers[ethernet.VLAN_TYPE] = vlan
-      from arp  import arp
+      from .arp  import arp
       ethernet.type_parsers[ethernet.ARP_TYPE]  = arp
       ethernet.type_parsers[ethernet.RARP_TYPE] = arp
-      from ipv4 import ipv4
+      from .ipv4 import ipv4
       ethernet.type_parsers[ethernet.IP_TYPE]   = ipv4
-      from ipv6 import ipv6
+      from .ipv6 import ipv6
       ethernet.type_parsers[ethernet.IPV6_TYPE] = ipv6
-      from lldp import lldp
+      from .lldp import lldp
       ethernet.type_parsers[ethernet.LLDP_TYPE] = lldp
-      from eapol import eapol
+      from .eapol import eapol
       ethernet.type_parsers[ethernet.PAE_TYPE]  = eapol
-      from mpls import mpls
+      from .mpls import mpls
       ethernet.type_parsers[ethernet.MPLS_TYPE] = mpls
       ethernet.type_parsers[ethernet.MPLS_MC_TYPE] = mpls
-      from llc import llc
+      from .llc import llc
       ethernet._llc = llc
 
     self.prev = prev

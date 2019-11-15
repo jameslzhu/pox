@@ -22,6 +22,7 @@ Connects to the POX messenger bus via TCP, and listens to a log channel.
 Requires the messenger, messenger.tcp_transport, and messenger.log_service
 components to be running.
 """
+from __future__ import print_function
 
 import json
 import sys
@@ -76,7 +77,7 @@ class LogJSONDestreamer (JSONDestreamer):
   def rx (self, data):
     if data.get('CHANNEL') != mychannel: return
 
-    print "%s|%s|%s" % (data['levelname'], data['name'], data['message'])
+    print("%s|%s|%s" % (data['levelname'], data['name'], data['message']))
 
 
 jd = LogJSONDestreamer()
@@ -85,7 +86,7 @@ while True:
   try:
     sock = socket.socket()
     sock.connect((host,port))
-    print >>sys.stderr, "== Connected =="
+    print("== Connected ==", file=sys.stderr)
     msg = {
         'CHANNEL' : '',
         'cmd' : 'join_channel',
@@ -116,7 +117,7 @@ while True:
     except KeyboardInterrupt:
       break
     except RuntimeError as e:
-      print >>sys.stderr, "== Disconnected =="
+      print("== Disconnected ==", file=sys.stderr)
       try:
         sock.close()
       except:

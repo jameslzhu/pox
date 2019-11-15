@@ -33,7 +33,9 @@ This can be overridden by setting the PYTHONDOCS environment variable
 to a different URL or to a local directory containing the Library
 Reference Manual pages.
 """
+from __future__ import print_function
 
+from future.utils import raise_
 __author__ = "Ka-Ping Yee <ping@lfw.org>"
 __date__ = "26 February 2001"
 
@@ -245,7 +247,7 @@ class ErrorDuringImport(Exception):
 
     def __str__(self):
         exc = self.exc
-        if type(exc) is types.ClassType:
+        if type(exc) is type:
             exc = exc.__name__
         return 'problem in %s - %s: %s' % (self.filename, exc, self.value)
 
@@ -341,7 +343,7 @@ class Doc:
         """Raise an exception for unimplemented types."""
         message = "don't know how to document object%s of type %s" % (
             name and ' ' + repr(name), type(object).__name__)
-        raise TypeError, message
+        raise TypeError(message)
 
     docmodule = docclass = docroutine = docother = docproperty = docdata = fail
 
@@ -880,17 +882,17 @@ class HTMLDoc(Doc):
         note = ''
         skipdocs = 0
         if inspect.ismethod(object):
-            imclass = object.im_class
+            imclass = object.__self__.__class__
             if cl:
                 if imclass is not cl:
                     note = ' from ' + self.classlink(imclass, mod)
             else:
-                if object.im_self is not None:
+                if object.__self__ is not None:
                     note = ' method of %s instance' % self.classlink(
-                        object.im_self.__class__, mod)
+                        object.__self__.__class__, mod)
                 else:
                     note = ' unbound %s method' % self.classlink(imclass,mod)
-            object = object.im_func
+            object = object.__func__
 
         if name == realname:
             title = '<a name="%s"><strong>%s</strong></a>' % (anchor, realname)
@@ -1263,17 +1265,17 @@ class TextDoc(Doc):
         note = ''
         skipdocs = 0
         if inspect.ismethod(object):
-            imclass = object.im_class
+            imclass = object.__self__.__class__
             if cl:
                 if imclass is not cl:
                     note = ' from ' + classname(imclass, mod)
             else:
-                if object.im_self is not None:
+                if object.__self__ is not None:
                     note = ' method of %s instance' % classname(
-                        object.im_self.__class__, mod)
+                        object.__self__.__class__, mod)
                 else:
                     note = ' unbound %s method' % classname(imclass,mod)
-            object = object.im_func
+            object = object.__func__
 
         if name == realname:
             title = self.bold(realname)
@@ -1498,7 +1500,7 @@ def resolve(thing, forceload=0):
     if isinstance(thing, str):
         object = locate(thing, forceload)
         if not object:
-            raise ImportError, 'no Python documentation found for %r' % thing
+            raise_(ImportError, 'no Python documentation found for %r' % thing)
         return object, thing
     else:
         return thing, getattr(thing, '__name__', None)
@@ -1532,8 +1534,8 @@ def doc(thing, title='Python Library Documentation: %s', forceload=0):
     """Display text documentation, given an object or a path to an object."""
     try:
         pager(render_doc(thing, title, forceload))
-    except (ImportError, ErrorDuringImport), value:
-        print value
+    except (ImportError, ErrorDuringImport) as value:
+        print(value)
 
 def writedoc(thing, forceload=0):
     """Write HTML documentation to a file in the current directory."""
@@ -1543,9 +1545,9 @@ def writedoc(thing, forceload=0):
         file = open(name + '.html', 'w')
         file.write(page)
         file.close()
-        print 'wrote', name + '.html'
-    except (ImportError, ErrorDuringImport), value:
-        print value
+        print('wrote', name + '.html')
+    except (ImportError, ErrorDuringImport) as value:
+        print(value)
 
 def writedocs(dir, pkgpath='', done=None):
     """Write out HTML documentation for all modules in a directory tree."""
@@ -1933,7 +1935,7 @@ class Scanner:
         node, children = self.state[-1]
         if not children:
             self.state.pop()
-            return self.next()
+            return next(self)
         child = children.pop(0)
         if self.descendp(child):
             self.state.append((child, self.children(child)))
@@ -1989,7 +1991,7 @@ def apropos(key):
     def callback(path, modname, desc):
         if modname[-9:] == '.__init__':
             modname = modname[:-9] + ' (package)'
-        print modname, desc and '- ' + desc
+        print(modname, desc and '- ' + desc)
     def onerror(modname):
         # Ignore non-ImportError exceptions raised whilst trying to
         # import modules
@@ -2030,7 +2032,7 @@ def serve(port, callback=None, completer=None):
             if path and path != '.':
                 try:
                     obj = locate(path, forceload=1)
-                except ErrorDuringImport, value:
+                except ErrorDuringImport as value:
                     self.send_document(path, html.escape(str(value)))
                     return
                 if obj:
@@ -2308,9 +2310,9 @@ def cli():
                 except ValueError:
                     raise BadUsage
                 def ready(server):
-                    print 'pydoc server ready at %s' % server.url
+                    print('pydoc server ready at %s' % server.url)
                 def stopped():
-                    print 'pydoc server stopped'
+                    print('pydoc server stopped')
                 serve(port, ready, stopped)
                 return
             if opt == '-w':
@@ -2319,7 +2321,7 @@ def cli():
         if not args: raise BadUsage
         for arg in args:
             if ispath(arg) and not os.path.exists(arg):
-                print 'file %r does not exist' % arg
+                print('file %r does not exist' % arg)
                 break
             try:
                 if ispath(arg) and os.path.isfile(arg):
@@ -2331,12 +2333,12 @@ def cli():
                         writedoc(arg)
                 else:
                     help.help(arg)
-            except ErrorDuringImport, value:
-                print value
+            except ErrorDuringImport as value:
+                print(value)
 
     except (getopt.error, BadUsage):
         cmd = os.path.basename(sys.argv[0])
-        print """pydoc - the Python documentation tool
+        print("""pydoc - the Python documentation tool
 
 %s <name> ...
     Show text documentation on something.  <name> may be the name of a
@@ -2359,6 +2361,6 @@ def cli():
     Write out the HTML documentation for a module to a file in the current
     directory.  If <name> contains a '%s', it is treated as a filename; if
     it names a directory, documentation is written for all the contents.
-""" % (cmd, os.sep, cmd, cmd, cmd, cmd, os.sep)
+""" % (cmd, os.sep, cmd, cmd, cmd, cmd, os.sep))
 
 if __name__ == '__main__': cli()

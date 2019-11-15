@@ -38,6 +38,7 @@ BaseHTTPServer is not very fast and needs to run on its own thread.
 It'd actually be great to have a version of this written against, say,
 CherryPy, but I did want to include a simple, dependency-free web solution.
 """
+from __future__ import absolute_import
 
 from SocketServer import ThreadingMixIn
 from BaseHTTPServer import *
@@ -45,7 +46,7 @@ from time import sleep
 import select
 import threading
 
-from authentication import BasicAuthMixin
+from .authentication import BasicAuthMixin
 
 from pox.core import core
 

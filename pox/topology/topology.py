@@ -21,6 +21,7 @@ with OpenFlow switches.
 Note that this means that you often want to invoke something like:
    $ ./pox.py topology openflow.discovery openflow.topology
 """
+from __future__ import print_function
 
 from pox.lib.revent import *
 from pox.core import core

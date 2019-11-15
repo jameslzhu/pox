@@ -18,9 +18,10 @@ Tracks host location and configuration
 
 See host_tracker.host_tracker for more info.
 """
+from __future__ import absolute_import
 
 from pox.core import core
-import host_tracker
+from . import host_tracker
 log = core.getLogger()
 import logging
 log.setLevel(logging.INFO)

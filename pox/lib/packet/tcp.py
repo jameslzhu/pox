@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011,2013,2014 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -43,11 +44,11 @@
 #======================================================================
 
 import struct
-from packet_utils import *
+from .packet_utils import *
 from socket import htons
 from socket import htonl
 
-from packet_base import packet_base
+from .packet_base import packet_base
 
 import logging
 lg = logging.getLogger('packet')

@@ -26,6 +26,7 @@ The forwarding code is based on l2_multi.
 Depends on openflow.discovery
 Works with openflow.spanning_tree (sort of)
 """
+from __future__ import print_function
 
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
@@ -69,8 +70,8 @@ def _calc_paths ():
         a = path_map[i][j][0]
         #a = adjacency[i][j]
         if a is None: a = "*"
-        print a,
-      print
+        print(a, end=' ')
+      print()
 
   sws = switches_by_dpid.values()
   path_map.clear()

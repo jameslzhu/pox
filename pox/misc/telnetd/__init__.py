@@ -25,6 +25,7 @@ and passing it your own subclass of TelnetPersonality.
 The default personality provides a Python prompt, similar to the "py"
 component (but remote, multi-instance, and executing cooperatively).
 """
+from __future__ import print_function
 
 from pox.core import core
 from pox.lib.ioworker.workers import *
@@ -692,7 +693,7 @@ class TelnetHandler (StateMachine):
 
   def _rx_telnet (self, msg):
     #self.log.info(" ".join("%02x" % (ord(x),) for x in msg))
-    print " ".join("%02x" % (ord(x),) for x in msg),
+    print(" ".join("%02x" % (ord(x),) for x in msg), end=' ')
 
   @property
   def log (self):
@@ -704,7 +705,7 @@ class TelnetHandler (StateMachine):
     class O (object):
       pass
     def pr (fmt, *args):
-      print fmt % args
+      print(fmt % args)
     def nopr (*args):
       pass
     o = O()

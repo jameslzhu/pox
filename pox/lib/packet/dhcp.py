@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011,2013 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -55,9 +56,9 @@
 #======================================================================
 import struct
 import string
-from packet_utils import *
+from .packet_utils import *
 
-from packet_base import packet_base
+from .packet_base import packet_base
 import pox.lib.util as util
 from pox.lib.util import is_subclass
 from pox.lib.addresses import *
@@ -600,7 +601,7 @@ class DHCPParameterRequestOption (DHCPOption):
       if n is None or not hasattr(n, 'im_self'):
         n = "Opt/" + str(o)
       else:
-        n = n.im_self.__name__
+        n = n.__self__.__name__
         if n.startswith("DHCP"): n = n[4:]
         if n.endswith("Option"): n = n[:-6]
         if n == "": n = "Opt"

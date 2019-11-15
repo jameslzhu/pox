@@ -20,6 +20,7 @@ local Linux routing tables accordingly.
 
 We're not quite RFC 2453 compliant; patches to address this are welcome!
 """
+from __future__ import absolute_import
 
 #TODO:
 # * Use interfaceio for dealing with interfaces?
@@ -32,7 +33,7 @@ RIP = pox.lib.packet.RIP
 from pox.lib.recoco import Timer, Task, RecvFrom, Recv, Select
 import socket
 import subprocess
-from rip_core import *
+from .rip_core import *
 
 
 DEFAULT_TABLENO = 1

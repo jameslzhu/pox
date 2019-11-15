@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2017 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,12 +38,12 @@
 
 import struct
 
-from packet_base import packet_base
-from packet_utils import checksum
-from ethernet import ethernet
-import ipv4
+from .packet_base import packet_base
+from .packet_utils import checksum
+from .ethernet import ethernet
+from . import ipv4
 
-from packet_utils import *
+from .packet_utils import *
 
 
 class gre (packet_base):

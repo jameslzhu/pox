@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Copyright 2011-2013 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,7 +94,7 @@ class basics_test (unittest.TestCase):
     for name in dir(nx):
       a = getattr(nx, name)
       if not nx._issubclass(a, of.ofp_action_vendor_base): continue
-      print "Trying",name,"...",
+      print("Trying",name,"...", end=' ')
       init = getattr(self, "_init_action_" + name, lambda c: c())
       original = init(a)
       original_packed = original.pack()
@@ -108,7 +109,7 @@ class basics_test (unittest.TestCase):
 
       self.assertEqual(original, unoriginal,
                        "Pack/Unpack failed for " + name)
-      print "Success!"
+      print("Success!")
 
 
   def test_nxm_ip (self):

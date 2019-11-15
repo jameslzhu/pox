@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -32,11 +33,11 @@
 #
 #======================================================================
 import struct
-from packet_utils       import *
+from .packet_utils       import *
 
-from packet_base import packet_base
+from .packet_base import packet_base
 
-from eap import *
+from .eap import *
 
 class eapol(packet_base):
     "EAP over LAN packet"

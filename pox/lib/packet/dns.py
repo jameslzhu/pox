@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011,2012 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -89,10 +90,10 @@
 #   General cleaup/rewrite (code is/has gotten pretty bad)
 
 import struct
-from packet_utils import *
-from packet_utils import TruncatedException as Trunc
+from .packet_utils import *
+from .packet_utils import TruncatedException as Trunc
 
-from packet_base import packet_base
+from .packet_base import packet_base
 
 from pox.lib.addresses import IPAddr,IPAddr6,EthAddr
 
@@ -298,7 +299,7 @@ class dns(packet_base):
         for i in range(0,total_questions):
             try:
                 query_head = self.next_question(raw, query_head)
-            except Exception, e:
+            except Exception as e:
                 self._exc(e, 'parsing questions')
                 return None
 
@@ -306,7 +307,7 @@ class dns(packet_base):
         for i in range(0,total_answers):
             try:
                 query_head = self.next_rr(raw, query_head, self.answers)
-            except Exception, e:
+            except Exception as e:
                 self._exc(e, 'parsing answers')
                 return None
 
@@ -314,7 +315,7 @@ class dns(packet_base):
         for i in range(0,total_auth_rr):
             try:
                 query_head = self.next_rr(raw, query_head, self.authorities)
-            except Exception, e:
+            except Exception as e:
                 self._exc(e, 'parsing authoritative name servers')
                 return None
 
@@ -322,7 +323,7 @@ class dns(packet_base):
         for i in range(0,total_add_rr):
             try:
                 query_head = self.next_rr(raw, query_head, self.additional)
-            except Exception, e:
+            except Exception as e:
                 self._exc(e, 'parsing additional resource records')
                 return None
 

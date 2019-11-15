@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2011,2013 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -29,10 +30,10 @@
 #======================================================================
 import struct
 
-from packet_base import packet_base
-from ethernet import ethernet
+from .packet_base import packet_base
+from .ethernet import ethernet
 
-from packet_utils import *
+from .packet_utils import *
 
 
 class mpls(packet_base):

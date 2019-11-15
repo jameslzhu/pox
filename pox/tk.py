@@ -17,6 +17,7 @@ Lets you use Tk with POX.
 
 Highly experimental.
 """
+from __future__ import absolute_import
 
 from collections import deque
 from pox.core import core
@@ -95,7 +96,7 @@ class Tk (object):
       def f ():
         l = {'self':self}
         l.update(kw)
-        exec code in globals(), l
+        exec(code, globals(), l)
       r = f()
     if rv: core.callLater(rv, r)
 
@@ -126,7 +127,7 @@ class Tk (object):
 
 
 def launch ():
-  import boot
+  from . import boot
   core.registerNew(Tk)
   boot.set_main_function(core.tk.run)
 

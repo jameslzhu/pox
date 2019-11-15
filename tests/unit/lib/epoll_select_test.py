@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import print_function
 import unittest
 import sys
 import os.path
@@ -31,7 +32,7 @@ from pox.lib.epoll_select import EpollSelect
 class TCPEcho(SocketServer.StreamRequestHandler):
   def handle(self):
     data = self.rfile.readline()
-    print "got data: %s" % data
+    print("got data: %s" % data)
     self.wfile.write(data)
 
 class ForkingTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
@@ -45,7 +46,7 @@ class ForkingTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     os.kill(self.pid, signal.SIGKILL)
 
 def sort_fdlists(rl,wl,xl) :
-  key = lambda(x): x.fileno() if hasattr(x, "fileno") else x
+  key = lambda x: x.fileno() if hasattr(x, "fileno") else x
 
   return (
             sorted(rl, key=key),

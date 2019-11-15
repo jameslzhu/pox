@@ -21,11 +21,12 @@ Specifically, this module is somewhat like an adapter that listens to
 events from other parts of the openflow substem (such as discovery), and
 uses them to populate and manipulate Topology.
 """
+from __future__ import absolute_import
 
 import itertools
 
 from pox.lib.revent import *
-import libopenflow_01 as of
+from . import libopenflow_01 as of
 from pox.openflow import *
 from pox.core import core
 from pox.topology.topology import *
@@ -381,14 +382,14 @@ class OFSyncFlowTable (EventMixin):
     if clear:
       self._pending_barrier_to_ops = {}
       self._pending_op_to_barrier = {}
-      self._pending = filter(lambda(op): op[0] == OFSyncFlowTable.ADD,
+      self._pending = filter(lambda op: op[0] == OFSyncFlowTable.ADD,
                              self._pending)
 
       self.switch.send(of.ofp_flow_mod(command=of.OFPFC_DELETE,
                                        match=of.ofp_match()))
       self.switch.send(of.ofp_barrier_request())
 
-      todo = map(lambda(e): (OFSyncFlowTable.ADD, e),
+      todo = map(lambda e: (OFSyncFlowTable.ADD, e),
                  self.flow_table.entries) + self._pending
     else:
       todo = [op for op in self._pending

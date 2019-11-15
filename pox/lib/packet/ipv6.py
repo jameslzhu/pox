@@ -45,14 +45,15 @@ This is still rough.  There are a number of things remaining to do
 are probably places where the API isn't quite right yet.  But it's
 a start.
 """
+from __future__ import absolute_import
 
 import struct
-from packet_utils import *
-from tcp import *
-from udp import *
-from icmpv6 import *
+from .packet_utils import *
+from .tcp import *
+from .udp import *
+from .icmpv6 import *
 
-from packet_base import packet_base
+from .packet_base import packet_base
 
 from pox.lib.addresses import IPAddr6
 from pox.lib.util import init_helper

@@ -15,6 +15,7 @@
 """
 Component to create PID files for running POX as a service
 """
+from __future__ import print_function
 
 from pox.core import core
 

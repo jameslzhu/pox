@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Copyright 2012,2013 James McCauley
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -2799,7 +2800,7 @@ def _unpack_nx_vendor (raw, offset):
     nrr = nx_role_reply()
     return nrr.unpack(raw, offset)[0], nrr
   else:
-    print "NO UNPACKER FOR",subtype
+    print("NO UNPACKER FOR",subtype)
     return _old_unpacker(raw, offset)
 
 

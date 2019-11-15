@@ -21,6 +21,7 @@ were not changing, sort of like recoco_spy.)
 This was initially factored out from a pox.py modification by
 Colin or Andi.
 """
+from __future__ import print_function
 
 import sys
 import time
@@ -35,10 +36,10 @@ def _trace_thread_proc ():
       frames = sys._current_frames()
       for key in frames:
         frame = frames[key]
-        print inspect.getframeinfo(frame)
+        print(inspect.getframeinfo(frame))
         outer_frames = inspect.getouterframes(frame)
         for i in range(0, len(outer_frames)):
-          print "     " + str(inspect.getframeinfo(outer_frames[i][0]))
+          print("     " + str(inspect.getframeinfo(outer_frames[i][0])))
 
       time.sleep(5)
   except:

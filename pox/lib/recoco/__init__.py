@@ -1,1 +1,2 @@
-from recoco import *
+from __future__ import absolute_import
+from .recoco import *

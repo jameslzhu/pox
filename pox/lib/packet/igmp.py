@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 # Copyright 2012 James McCauley
 # Copyright 2008 (C) Nicira, Inc.
 #
@@ -36,8 +37,8 @@
 #TODO: Support for IGMP v3
 
 import struct
-from packet_utils import *
-from packet_base import packet_base
+from .packet_utils import *
+from .packet_base import packet_base
 from pox.lib.addresses import *
 from pox.lib.util import initHelper
 
