@@ -638,9 +638,27 @@ static PyMethodDef pxpcapmethods[] =
 
 #define ADD_CONST(_s) PyModule_AddIntConstant(m, #_s, _s);
 
+#if PY_MAJOR_VERSION >= 3
+  static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "pxpcap",               // m_name
+    "",                     // m_doc
+    -1,                     // m_size
+    pxpcapmethods,          // m_methods
+    NULL,                   // m_reload
+    NULL,                   // m_traverse
+    NULL,                   // m_clear
+    NULL,                   // m_free
+  };
+#endif
+
 PyMODINIT_FUNC initpxpcap (void)
 {
+#if PY_MAJOR_VERSION >= 3
+  PyObject * m = PyModule_Create(&moduledef);
+#else
   PyObject * m = Py_InitModule("pxpcap", pxpcapmethods);
+#endif
 
   //TODO: merge with similar list above
   ADD_CONST(DLT_NULL);
@@ -668,5 +686,6 @@ PyMODINIT_FUNC initpxpcap (void)
   ADD_CONST(DLT_ARCNET_LINUX);
   ADD_CONST(DLT_LINUX_IRDA);
   ADD_CONST(DLT_LINUX_LAPD);
-}
 
+  return m;
+}
